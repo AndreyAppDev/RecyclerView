@@ -1,11 +1,19 @@
 package com.example.user.listwithstatemachine.data
 
 import com.example.user.listwithstatemachine.entity.News
+import java.lang.RuntimeException
 import java.util.*
 
 class NewsDataProvider : DataProvider<News> {
+
+    private var flag = true
+
     override fun provide(): MutableList<News> {
         val data = mutableListOf<News>()
+        if (flag){
+            flag = false
+            throw RuntimeException()
+        }
         data.add(News(
                 "Amazon Alexa goes AWOL for many users",
                 "Some Amazon  Alexa users are currently having problems reaching the voice assistant. Instead of reacting to commands, Alexa simply says “sorry, something went wrong.” Amazon hasn’t commented publicly yet on the issue.\n" +
