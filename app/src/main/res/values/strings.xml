@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ListWithStateMachine</string>
+    <string name="news_btn">News</string>
+    <string name="tools_title">Some title</string>
+    <string name="tools_long_lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac quam at ante interdum ullamcorper. Donec sit amet augue vel mi pellentesque faucibus. Suspendisse mollis venenatis quam, vel venenatis purus ornare a. In eleifend velit lorem, at sodales nulla venenatis nec. </string>
+</resources>
