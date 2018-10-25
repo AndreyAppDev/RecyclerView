@@ -10,9 +10,9 @@ class NewsPresenter : INewsPresenter {
 
     private var newsView: INewsView? = null
     private val loadNewsWorker = LoadNewsWorker()
-    private lateinit var baseStateMachine: BaseStateMachine<News>
+    private val baseStateMachine: BaseStateMachine<News>
 
-    override fun loadNews() {
+    init {
         baseStateMachine = BaseStateMachine({ loadNewsWorker },
                 object : BaseViewState<News> {
                     override fun showErrorState(error: Throwable) {
@@ -31,6 +31,9 @@ class NewsPresenter : INewsPresenter {
                         }
                     }
                 })
+    }
+
+    override fun loadNews() {
         baseStateMachine.refresh()
     }
 
@@ -39,7 +42,7 @@ class NewsPresenter : INewsPresenter {
     }
 
     override fun unbind() {
-//        newsView = null
         baseStateMachine.release()
+        newsView = null
     }
 }
