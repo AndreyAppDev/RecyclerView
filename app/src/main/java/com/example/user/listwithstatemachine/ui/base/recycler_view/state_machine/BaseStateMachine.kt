@@ -1,7 +1,7 @@
 package com.example.user.listwithstatemachine.ui.base.recycler_view.state_machine
 
 class BaseStateMachine<T>(protected val requestWorker: () -> RequestWorker<List<T>>,
-                          private val viewController: ViewController<T>) {
+                          private val viewController: BaseViewState<T>) {
 
     private var currentState: State<T> = EmptyState()
     private var completable: Completable? = null
@@ -11,22 +11,12 @@ class BaseStateMachine<T>(protected val requestWorker: () -> RequestWorker<List<
                 .load({ currentState.dataLoaded(it) }, { currentState.error(it) })
     }
 
-    interface ViewController<T> {
-        fun showData(show: Boolean, data: List<T>)
-        fun showEmptyState(show: Boolean)
-        fun showErrorState(error: Throwable)
-    }
-
-    interface State<T> {
-        fun restart() {}
-        fun refresh() {}
-        fun release() {}
-        fun error(error: Throwable) {}
-        fun dataLoaded(data: List<T>) {}
-    }
-
     fun refresh() {
         currentState.refresh()
+    }
+
+    fun release(){
+        currentState.release()
     }
 
     protected inner class EmptyState : State<T> {
@@ -50,6 +40,11 @@ class BaseStateMachine<T>(protected val requestWorker: () -> RequestWorker<List<
         override fun error(error: Throwable) {
             viewController.showEmptyState(false)
             viewController.showErrorState(error)
+        }
+
+        override fun release() {
+            completable?.complete()
+            currentState = ReleaseState()
         }
     }
 

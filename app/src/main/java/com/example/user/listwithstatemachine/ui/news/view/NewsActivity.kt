@@ -54,6 +54,11 @@ class NewsActivity : AppCompatActivity(), INewsView {
         progressBanner.visible(show)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        newsPresenter.unbind()
+    }
+
     companion object {
         fun start(activity: Activity) {
             val intent = Intent(activity, NewsActivity::class.java)

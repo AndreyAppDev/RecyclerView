@@ -17,7 +17,7 @@ class LoadNewsWorker : RequestWorker<List<News>> {
 
     override fun load(onNext: (List<News>) -> Unit, onError: (Throwable) -> Unit): Completable {
         disposable = Observable.fromCallable {
-            Thread.sleep(3000)
+            Thread.sleep(5000)
         }.flatMap { Observable.just(dataProvider.provide()) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
