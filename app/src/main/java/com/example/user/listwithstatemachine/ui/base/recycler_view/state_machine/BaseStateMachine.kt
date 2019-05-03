@@ -19,7 +19,7 @@ class BaseStateMachine<T>(protected val requestWorker: () -> RequestWorker<List<
         currentState.release()
     }
 
-    protected inner class EmptyState : State<T> {
+    private inner class EmptyState : State<T> {
         override fun refresh() {
             currentState = ProgressState()
             viewController.showEmptyState(true)
@@ -32,7 +32,7 @@ class BaseStateMachine<T>(protected val requestWorker: () -> RequestWorker<List<
         }
     }
 
-    protected inner class ProgressState : State<T> {
+    private inner class ProgressState : State<T> {
         override fun dataLoaded(data: List<T>) {
             viewController.showData(true, data)
         }
@@ -42,14 +42,18 @@ class BaseStateMachine<T>(protected val requestWorker: () -> RequestWorker<List<
             viewController.showErrorState(error)
         }
 
+        override fun refresh() {
+            currentState = ProgressState()
+            viewController.showEmptyState(true)
+            loadData()
+        }
+
         override fun release() {
             completable?.complete()
             currentState = ReleaseState()
         }
     }
 
-    protected inner class ReleaseState : State<T> {
-
-    }
+    private inner class ReleaseState : State<T>
 
 }
