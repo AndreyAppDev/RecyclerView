@@ -5,6 +5,7 @@ import com.example.user.listwithstatemachine.entity.News
 import com.example.user.listwithstatemachine.ui.base.recycler_view.state_machine.Completable
 import com.example.user.listwithstatemachine.ui.base.recycler_view.state_machine.RequestWorker
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -16,9 +17,9 @@ class LoadNewsWorker : RequestWorker<List<News>> {
     private val dataProvider = NewsDataProvider()
 
     override fun load(onNext: (List<News>) -> Unit, onError: (Throwable) -> Unit): Completable {
-        disposable = Observable.fromCallable {
+        disposable = Single.fromCallable {
             Thread.sleep(5000)
-        }.flatMap { Observable.just(dataProvider.provide()) }
+        }.flatMap { Single.just(dataProvider.provide()) }
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(onNext, onError)

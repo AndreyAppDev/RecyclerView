@@ -29,12 +29,6 @@ class NewsActivity : AppCompatActivity(), INewsView {
         loadNewsBtn.setOnClickListener { newsPresenter.loadNews() }
     }
 
-    private fun initRecyclerView() {
-        newsRecyclerAdapter = NewsRecyclerAdapter(LayoutInflater.from(this))
-        newsRecyclerView.layoutManager = LinearLayoutManager(this)
-        newsRecyclerView.adapter = newsRecyclerAdapter
-    }
-
     override fun showNews(show: Boolean, data: List<News>) {
         newsRecyclerAdapter.addData(data)
         newsRecyclerView.visible(show)
@@ -54,9 +48,15 @@ class NewsActivity : AppCompatActivity(), INewsView {
         progressBanner.visible(show)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
+    override fun onDestroy() {
+        super.onDestroy()
         newsPresenter.unbind()
+    }
+
+    private fun initRecyclerView() {
+        newsRecyclerAdapter = NewsRecyclerAdapter(LayoutInflater.from(this))
+        newsRecyclerView.layoutManager = LinearLayoutManager(this)
+        newsRecyclerView.adapter = newsRecyclerAdapter
     }
 
     companion object {
